@@ -29,22 +29,28 @@ impl rand::distr::Distribution<Hand> for rand::distr::StandardUniform {
     }
 }
 
-fn evaluate_hand(p1: &Hand, p2: &Hand) -> i32 {
+enum Outcome {
+    Tie,
+    Player1,
+    Player2,
+}
+
+fn evaluate_hand(p1: &Hand, p2: &Hand) -> Outcome {
     match p1 {
         Hand::Rock => match p2 {
-            Hand::Rock => 0,
-            Hand::Paper => 2,
-            Hand::Scissors => 1,
+            Hand::Rock => Outcome::Tie,
+            Hand::Paper => Outcome::Player2,
+            Hand::Scissors => Outcome::Player1,
         },
         Hand::Paper => match p2 {
-            Hand::Rock => 1,
-            Hand::Paper => 0,
-            Hand::Scissors => 2,
+            Hand::Rock => Outcome::Player1,
+            Hand::Paper => Outcome::Tie,
+            Hand::Scissors => Outcome::Player2,
         },
         Hand::Scissors => match p2 {
-            Hand::Rock => 2,
-            Hand::Paper => 1,
-            Hand::Scissors => 0,
+            Hand::Rock => Outcome::Player2,
+            Hand::Paper => Outcome::Player1,
+            Hand::Scissors => Outcome::Tie,
         },
     }
 }
@@ -82,14 +88,13 @@ fn main() -> io::Result<()> {
 
         let p2: Hand = rand::random();
 
-        let winner: i32 = evaluate_hand(&p1, &p2);
+        let winner: Outcome = evaluate_hand(&p1, &p2);
 
         print!("{} vs {} - ", p1, p2);
         match winner {
-            0 => println!("Tie"),
-            1 => println!("Player 1 wins"),
-            2 => println!("Player 2 wins"),
-            _ => println!("Undefined..."),
+            Outcome::Tie => println!("Tie"),
+            Outcome::Player1 => println!("Player 1 wins"),
+            Outcome::Player2 => println!("Player 2 wins"),
         }
     }
 
