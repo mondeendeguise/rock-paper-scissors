@@ -9,6 +9,16 @@ enum Hand {
     Scissors,
 }
 
+enum GameError {
+    InvalidChoice,
+}
+
+enum Outcome {
+    Tie,
+    Player1Wins,
+    Player2Wins,
+}
+
 impl fmt::Display for Hand {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -27,12 +37,6 @@ impl rand::distr::Distribution<Hand> for rand::distr::StandardUniform {
             _ => Hand::Scissors,
         }
     }
-}
-
-enum Outcome {
-    Tie,
-    Player1Wins,
-    Player2Wins,
 }
 
 fn evaluate_hand(p1: &Hand, p2: &Hand) -> Outcome {
@@ -55,12 +59,25 @@ fn evaluate_hand(p1: &Hand, p2: &Hand) -> Outcome {
     }
 }
 
-fn main() -> io::Result<()> {
+fn determine_choice(player_input: String) -> Result<Hand, GameError> {
+    if player_input == "r" || player_input == "rock" || player_input == "1" {
+        return Ok(Hand::Rock);
+    }
 
+    if player_input == "p" || player_input == "paper" || player_input == "2" {
+        return Ok(Hand::Paper);
+    }
+
+    if player_input == "s" || player_input == "scissors" || player_input == "3" {
+        return Ok(Hand::Scissors);
+    }
+
+    return Err(GameError::InvalidChoice);
+}
+
+fn main() -> io::Result<()> {
     loop {
         println!("Rock Paper Scissors");
-
-        let p1: Hand;
 
         let mut buffer = String::new();
         io::stdin().read_line(&mut buffer)?;
@@ -70,21 +87,10 @@ fn main() -> io::Result<()> {
             break;
         }
 
-        else if buffer == "r" || buffer == "rock" || buffer == "1" {
-            p1 = Hand::Rock;
-        }
-
-        else if buffer == "p" || buffer == "paper" || buffer == "2" {
-            p1 = Hand::Paper;
-        }
-
-        else if buffer == "s" || buffer == "scissors" || buffer == "3" {
-            p1 = Hand::Scissors;
-        }
-
-        else {
-            continue;
-        }
+        let p1 = match determine_choice(buffer) {
+            Ok(value) => value,
+            Err(_err) => continue,
+        };
 
         let p2: Hand = rand::random();
 
