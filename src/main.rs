@@ -59,20 +59,13 @@ fn evaluate_hand(p1: &Hand, p2: &Hand) -> Outcome {
     }
 }
 
-fn determine_choice(player_input: String) -> Result<Hand, GameError> {
-    if player_input == "r" || player_input == "rock" || player_input == "1" {
-        return Ok(Hand::Rock);
+fn determine_choice(player_input: &str) -> Result<Hand, GameError> {
+    match player_input {
+        "r" | "rock" | "1" => Ok(Hand::Rock),
+        "p" | "paper" | "2" => Ok(Hand::Paper),
+        "s" | "scissors" | "3" => Ok(Hand::Scissors),
+        _ => Err(GameError::InvalidChoice),
     }
-
-    if player_input == "p" || player_input == "paper" || player_input == "2" {
-        return Ok(Hand::Paper);
-    }
-
-    if player_input == "s" || player_input == "scissors" || player_input == "3" {
-        return Ok(Hand::Scissors);
-    }
-
-    return Err(GameError::InvalidChoice);
 }
 
 fn main() -> io::Result<()> {
@@ -87,7 +80,7 @@ fn main() -> io::Result<()> {
             break;
         }
 
-        let p1: Hand = match determine_choice(buffer) {
+        let p1: Hand = match determine_choice(&buffer) {
             Ok(value) => value,
             Err(_err) => continue,
         };
