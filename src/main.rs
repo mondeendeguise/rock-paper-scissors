@@ -87,7 +87,7 @@ fn main() -> io::Result<()> {
             break;
         }
 
-        let p1 = match determine_choice(buffer) {
+        let p1: Hand = match determine_choice(buffer) {
             Ok(value) => value,
             Err(_err) => continue,
         };
