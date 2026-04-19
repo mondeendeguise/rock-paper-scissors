@@ -31,25 +31,25 @@ impl rand::distr::Distribution<Hand> for rand::distr::StandardUniform {
 
 enum Outcome {
     Tie,
-    Player1,
-    Player2,
+    Player1Wins,
+    Player2Wins,
 }
 
 fn evaluate_hand(p1: &Hand, p2: &Hand) -> Outcome {
     match p1 {
         Hand::Rock => match p2 {
             Hand::Rock => Outcome::Tie,
-            Hand::Paper => Outcome::Player2,
-            Hand::Scissors => Outcome::Player1,
+            Hand::Paper => Outcome::Player2Wins,
+            Hand::Scissors => Outcome::Player1Wins,
         },
         Hand::Paper => match p2 {
-            Hand::Rock => Outcome::Player1,
+            Hand::Rock => Outcome::Player1Wins,
             Hand::Paper => Outcome::Tie,
-            Hand::Scissors => Outcome::Player2,
+            Hand::Scissors => Outcome::Player2Wins,
         },
         Hand::Scissors => match p2 {
-            Hand::Rock => Outcome::Player2,
-            Hand::Paper => Outcome::Player1,
+            Hand::Rock => Outcome::Player2Wins,
+            Hand::Paper => Outcome::Player1Wins,
             Hand::Scissors => Outcome::Tie,
         },
     }
@@ -93,8 +93,8 @@ fn main() -> io::Result<()> {
         print!("{} vs {} - ", p1, p2);
         match winner {
             Outcome::Tie => println!("Tie"),
-            Outcome::Player1 => println!("Player 1 wins"),
-            Outcome::Player2 => println!("Player 2 wins"),
+            Outcome::Player1Wins => println!("Player 1 wins"),
+            Outcome::Player2Wins => println!("Player 2 wins"),
         }
     }
 
