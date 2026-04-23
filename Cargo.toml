@@ -2,7 +2,19 @@
 name = "rock-paper-scissors"
 version = "0.1.0"
 edition = "2024"
+default-run = "local"
 
 [dependencies]
-
 rand = "0.10"
+
+[[bin]]
+name = "local"
+path = "src/local/main.rs"
+
+[[bin]]
+name = "host"
+path = "src/host/main.rs"
+
+[[bin]]
+name = "client"
+path = "src/client/main.rs"
