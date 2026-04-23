@@ -92,8 +92,8 @@ fn main() -> io::Result<()> {
         print!("{} vs {} - ", p1, p2);
         match winner {
             Outcome::Tie => println!("Tie"),
-            Outcome::Player1Wins => println!("Player 1 wins"),
-            Outcome::Player2Wins => println!("Player 2 wins"),
+            Outcome::Player1Wins => println!("You win"),
+            Outcome::Player2Wins => println!("You lose"),
         }
     }
 
